@@ -5,20 +5,17 @@
         data() {
             return {
                 items: ['keyboard', 'mouse', 'iPhone', 'macbook', 'adapter'],
-                newItem: "Candy",
+                newItem: "",
             }
         },
-
         methods: {
-            deleteParent(index) {
-                this.items.splice(index, 1);
+            removeItem(index) {
+                this.items.splice(index, 1)
             },
             addItem() {
-                const itemName = this.newItem;
-                this.items.push(itemName);
+                this.items.push(this.newItem);
             }
         }
-
         
 
     }
@@ -28,11 +25,10 @@
 
     <h2>Shopping Cart</h2>
     <!-- TODO: Add Code Here -->
-     <ul id="itemList">
-        <li v-for="item, index in items" :key="index">
-            {{ item }}<button v-on:click="deleteParent(index)">Delete!</button>
-        </li>
+     <ul>
+        <li v-for="item, index in items">{{item}}<button v-on:click="removeItem(index)">Delete!</button></li>
      </ul>
-     <input type="text" v-model="newItem"></input><button v-on:click="addItem">Add!</button>
+
+     <input v-model=newItem></input><button v-on:click="addItem()">Add!</button>
    
 </template>

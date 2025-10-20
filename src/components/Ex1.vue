@@ -4,18 +4,19 @@
         // Note: DO NOT USE "eval()". In security, "eval" is considered "evil"!!!
         data () {
             return {
-                operators: ["+", "-", "*", "/", "%"],
+                operators: ['+', '-', '*', '/', '%'],
                 x: 0,
                 y: 0,
-                selectedOp: "+"
+                selectedOp: ""
             }
-        },
-        computed: {
-            result () {
+            },
+
+            computed: {
+                result () {
                     if (this.selectedOp == "+") {
                         return this.x + this.y;
                     }
-                    if (this.selectedOp == "-") {
+                    if (this.op == "-") {
                         return this.x - this.y;
                     }
                     if (this.selectedOp == "*") {
@@ -28,16 +29,12 @@
                         return this.x / this.y;
                     }
                     if (this.selectedOp == "%") {
-    
                         if (this.y == 0) {
                             return "error"
                         }
                         return this.x % this.y;
                     }
-                    else {
-                        return 0
-                    }
-                }     
+                }
             }
 
                 
