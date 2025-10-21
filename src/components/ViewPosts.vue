@@ -45,7 +45,7 @@ export default {
         },
         updatePost() {
             axios.post(`${this.baseUrl}/updatePost`, {
-                    id: this.posts.length-this.id,
+                    id: this.posts[this.id].id,
                     subject: this.posts[this.id].subject,
                     entry: this.entry,
                     mood: this.mood,
