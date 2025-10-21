@@ -1,7 +1,15 @@
 <script>
+import axios from 'axios';
+
     export default { 
 
        // add code here
+       data () {
+
+       }, 
+       created () {
+        axios.get("get")
+       }
 
     }
 </script>
@@ -19,6 +27,7 @@
 
         Mood:
         <!-- TODO: Build a dropdown list here for selecting the mood -->
+
 
         <br>
 
