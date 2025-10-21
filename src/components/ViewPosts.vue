@@ -44,14 +44,22 @@ export default {
             
         },
         updatePost() {
-            axios.post(`${this.baseUrl}/updatePost`, {
+            const params = {
                     id: this.posts[this.id].id,
                     subject: this.posts[this.id].subject,
                     entry: this.entry,
                     mood: this.mood,
-            })
+            }
+            axios.post(`${this.baseUrl}/updatePost`, params)
             .then(response=>{
-                console.log(response.data);
+                this.posts[this.id].entry = this.entry;
+                this.posts[this.id].mood = this.mood;
+                
+                // Reset form and hide edit section
+                this.showEditPost = false;
+                this.entry = "";
+                this.mood = "";
+                this.id = "";
 
             })
         }
@@ -96,7 +104,7 @@ export default {
                             <option v-for="mood in moods" :value="mood">{{ mood }}</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary" @click="updatePost()">Update Post</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="updatePost">Update Post</button>
                 </form>
             </div>
         </div>
