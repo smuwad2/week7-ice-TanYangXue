@@ -30,38 +30,42 @@ export default {
             .then(response => {
                 // this gets the data, which is an array, and pass the data to Vue instance's posts property
                 this.posts = response.data
+                console.log(this.posts)
             })
             .catch(error => {
                 this.posts = [{ entry: 'There was an error: ' + error.message }]
             })
     },
     methods: {
-        editPost(id) {
-            this.entry = this.posts[id]['entry'];
-            this.mood = this.posts[id]['mood'];
-            this.id = id;
+        editPost(index, postIndex) {
+            this.entry = this.posts[index]['entry'];
+            this.mood = this.posts[index]['mood'];
+            this.id = postIndex;
             this.showEditPost = true;
             
         },
         updatePost() {
             const params = {
-                    id: this.posts[this.id].id,
-                    subject: this.posts[this.id].subject,
                     entry: this.entry,
                     mood: this.mood,
             }
-            axios.post(`${this.baseUrl}/updatePost`, params)
-            .then(response=>{
-                this.posts[this.id].entry = this.entry;
-                this.posts[this.id].mood = this.mood;
-                
-                // Reset form and hide edit section
-                this.showEditPost = false;
-                this.entry = "";
-                this.mood = "";
-                this.id = "";
-
+            axios.post(`${this.baseUrl}/updatePost?id=${this.id}`, params)
+            .then(()=>{
+                axios.get(`${this.baseUrl}/posts`)
+                .then(response2=>{
+                    this.posts = response2.data;
+                    this.showEditPost = false;
+                    this.entry = '';
+                    this.mood='';
+                    this.id='';
+                })
+                .catch(error=>{
+                    console.log(error);
+                })
             })
+
+            
+            
         }
     }
 }
@@ -79,11 +83,11 @@ export default {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="post, index in posts">
+                <tr v-for="post, index in posts" :key="post.id">
                     <td>{{ post.id }}</td>
                     <td>{{ post.entry }}</td>
                     <td>{{ post.mood }}</td>
-                    <td><button @click="editPost(index)">Edit</button></td>
+                    <td><button @click="editPost(index, post.id)">Edit</button></td>
                 </tr>
             </tbody>
 
@@ -92,7 +96,7 @@ export default {
         <div id="editPost" v-if="showEditPost">
             <h3>Edit Post</h3>
             <div id="postContent" class="mx-3">
-                <form>
+                <form @submit.prevent="updatePost">
                     <div class="mb-3">
                         <label for="entry" class="form-label">Entry</label>
                         <textarea id="entry" class="form-control" v-model="entry" required></textarea>
@@ -104,7 +108,7 @@ export default {
                             <option v-for="mood in moods" :value="mood">{{ mood }}</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary" @click.prevent="updatePost">Update Post</button>
+                    <button type="submit" class="btn btn-primary">Update Post</button>
                 </form>
             </div>
         </div>
